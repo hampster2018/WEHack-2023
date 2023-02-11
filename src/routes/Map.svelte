@@ -1,5 +1,6 @@
 <script>
 	import { Loader } from '@googlemaps/js-api-loader';
+    export let PUBLIC_API_KEY;
 
     /**
 	 * @type {HTMLDivElement}
@@ -7,11 +8,11 @@
     let container;
     let map;
     let zoom = 12;
-    let center = { lat: 32.7916841, lng: -96.804615};
+    let center = { lat: 32.7916841, lng: -96.8004513};
 
 
     const loader = new Loader({
-        apiKey: "",
+        apiKey: PUBLIC_API_KEY,
     });
 
     const mapOptions = {
@@ -52,10 +53,10 @@
 </script>
 
 <style>
-.full-screen {
-    width: 100%;
-    height: 100%;
-}
+    .full-screen {
+        width: 100%;
+        height: 100%;
+    }
 </style>
 
 <div class="full-screen" bind:this={container}></div>

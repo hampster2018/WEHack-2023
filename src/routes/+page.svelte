@@ -1,6 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import Map from './Map.svelte';
+	import { API_KEY } from './api_key';
 	export let ready = false;
 
 	// Write a function that smoothly scrolls to the map on a slight delay after setting ready to true
@@ -22,17 +23,21 @@
 
 <main id="main">
 	<div id="welcome" class="fullscreen-page">
-		<h1>Welcome to our Project</h1>
-		<!-- <p>Visit our <a href="https://github.com/hampster2018/WEHack-2023">Github repository</a> to check out more about our project!</p> -->
-		<!-- Make a button that says "ready?" and when clicked, set ready to true, as well as call a function that smoothly scrolls to the map -->
-		<button id="submit-button" on:click={scrollToMap}>Ready?</button>
+		<h1>Welcome to our project!</h1>
+
+		<!-- Make an input field with a transparent default text of "Enter an address, zipcode, city, or state" and hide the placeholder on focus -->
+		<form id="zipcode-form" on:submit|preventDefault={scrollToMap}>
+			<input id="zipcode-input" type="text" placeholder="Enter a zipcode" />
+			<button id="submit-button" >Ready?</button>
+		</form>
 	</div>
 
 	{#if ready}
 		<div id="map" class="fullscreen-page">
-			<Map />
+			<Map PUBLIC_API_KEY="{API_KEY}" />
 		</div>
 	{/if}
+
 </main>
 
 <style>
@@ -63,20 +68,6 @@
 		text-align: center;
 	}
 
-	/* Style the submit button to be minimalistic and nice */
-	#submit-button {
-		margin-top: 1rem;
-		padding: 0.5rem 1rem;
-		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-		font-size: 1.5rem;
-		font-weight: 300;
-		border: 1px solid #000;
-		border-radius: 0.25rem;
-		background-color: #FFF;
-		color: #000;
-		cursor: pointer;
-	}
-
 	#submit-button:hover {
 		background-color: #000;
 		color: #FFF;
@@ -87,5 +78,39 @@
 		transition: 0.3s;
 	}
 
+	#zipcode-form {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	/* Style the input field similarly to the submit-button */
+	input {
+		text-align: center;
+		padding: 0.5rem 1rem;
+		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+		font-size: 1.5rem;
+		font-weight: 300;
+		background-color: #FFF;
+		color: #000;
+		border: 1px solid #000;
+		border-radius: 0.25rem;
+		width: 80%;
+	}
+
+	/* Style the submit button to be minimalistic and nice */
+	#submit-button {
+		border: 1px solid #000;
+		border-radius: 0.25rem;
+		margin-top: 1rem;
+		cursor: pointer;
+		padding: 0.5rem 1rem;
+		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+		font-size: 1.5rem;
+		font-weight: 300;
+		background-color: #FFF;
+		color: #000;
+		width: 50%;
+	}
 
 </style>
