@@ -6,7 +6,7 @@
 	 */
     let container;
     let map;
-    let zoom = 8;
+    let zoom = 12;
     let center = { lat: 32.7916841, lng: -96.804615};
 
 
@@ -20,7 +20,31 @@
     };
 
     loader.load().then((google) => {
-        new google.maps.Map(container, mapOptions);
+        // The initMap function alternative
+
+        // @ts-ignore
+        const map = new google.maps.Map(container, mapOptions);
+
+        const infoWindow = new google.maps.InfoWindow();
+
+        const marker = new google.maps.Marker({
+            position: center,
+            map: map,
+            title: "CBRE Main Office!",
+        });
+
+        marker.addListener("click", ({ domEvent, latLng }) => {
+            const { target } = domEvent;
+
+            infoWindow.close();
+            // @ts-ignore
+            infoWindow.setContent(marker.title);
+            // @ts-ignore
+            infoWindow.open(marker.map, marker);
+        });
+
+
+
     }).catch(e => {
         console.error(e);
     });
