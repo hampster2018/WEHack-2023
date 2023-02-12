@@ -38,3 +38,8 @@ export const houses = writable([
 		coords: {lat: 40.122138642221444, lng: -74.99880327326689}
 	},
 ]);
+
+/**
+ * @type {import('svelte/store').Writable<number>}
+ */
+export const selectedHouse = writable(-1);

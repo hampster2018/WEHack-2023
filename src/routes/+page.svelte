@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import Map from './Map.svelte';
 	import { API_KEY } from './api_key';
-	import { mapCenter } from './storage';
+	import { mapCenter, selectedHouse } from './storage';
 	import Saos from "saos";
 	export let ready = false;
 	
@@ -24,12 +24,28 @@
 	onMount(() => {
 		// @ts-ignore
 		document.querySelector('body').style.opacity = 1;
+
 	});
 
 	/**
 	 * @type {{ lat: number; lng: number; }}
 	 */
 	let geoselect;
+	
+	/**
+	 * @type {HTMLDivElement}
+	 */
+	let summaryPage;
+
+    selectedHouse.subscribe((value) => {
+		// smooth scroll to the summary page
+		setTimeout(() => {
+			// @ts-ignore
+			if(summaryPage) {
+				summaryPage.scrollIntoView({ behavior: 'smooth' });
+			}
+		}, 1);
+    });
 
 </script>
 
@@ -59,8 +75,10 @@
 		<div id="map" class="fullscreen-page">
 			<Map PUBLIC_API_KEY="{API_KEY}" />
 		</div>
+	{/if}
 
-		<div id="summary" class="fullscreen-page">
+	{#if $selectedHouse != -1}
+		<div bind:this={summaryPage} id="summary" class="fullscreen-page">
 			<Saos top={100} once={true} animation={"fade-in 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both"}>
 				<h1>Summary</h1>
 			</Saos>
@@ -76,7 +94,6 @@
 
 		</div>
 	{/if}
-
 </main>
 
 <style>

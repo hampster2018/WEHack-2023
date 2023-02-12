@@ -2,7 +2,7 @@
 	import { Loader } from '@googlemaps/js-api-loader';
 	import { onMount } from 'svelte';
 	import { API_KEY } from './api_key';
-    import { mapCenter, houses } from './storage';
+    import { mapCenter, houses, selectedHouse } from './storage';
 
     /**
 	 * @type {string}
@@ -64,7 +64,7 @@
             const infoWindow = new google.maps.InfoWindow();
 
             // For every house in houses we want to make a marker and add it to the map
-            $houses.forEach((house) => {
+            $houses.forEach((house, index) => {
                 const marker = new google.maps.Marker({
                     position: house.coords,
                     map: map,
@@ -74,7 +74,9 @@
                 marker.addListener("click", ({ domEvent, latLng }) => {
                     const { target } = domEvent;
 
-                    console.log(`Click at: ${latLng.lat()}, ${latLng.lng()}`);
+                    console.log(`Click on: ${index}`);
+
+                    selectedHouse.set(index);
 
                     infoWindow.close();
                     // @ts-ignore
@@ -85,24 +87,6 @@
                     infoWindow.open(marker.map, marker);
                 });
             });
-            
-            // const marker = new google.maps.Marker({
-            //     position: $mapCenter,
-            //     map: map,
-            //     title: "CBRE Main Office!",
-            // });
-
-            // marker.addListener("click", ({ domEvent, latLng }) => {
-            //     const { target } = domEvent;
-
-            //     console.log(`Click at: ${latLng.lat()}, ${latLng.lng()}`);
-
-            //     infoWindow.close();
-            //     // @ts-ignore
-            //     infoWindow.setContent(marker.title);
-            //     // @ts-ignore
-            //     infoWindow.open(marker.map, marker);
-            // });
 
         }).catch(e => {
             console.error(e);
