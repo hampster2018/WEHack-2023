@@ -17,7 +17,19 @@
 	onMount(() => {
 		selectedHouse.set(-1);
 		// @ts-ignore
-		document.querySelector('body').style.opacity = 1;
+
+		setTimeout(() => {
+			let image1 = document.getElementById('image1');
+			let image2 = document.getElementById('image2');
+			// @ts-ignore
+			image1.style.right = `${Number(image1.style.right) - 100}px`;
+			// @ts-ignore
+			image2.style.left = `${Number(image2.style.left) - 230}px`;
+			setTimeout(() => {
+				// @ts-ignore
+				document.getElementById('welcome').style.opacity = '1';
+			}, 1000);
+		}, 1000);
 	});
 
 
@@ -125,9 +137,15 @@
 </head>
 
 <main id="main" style="--theme-color-primary: {CBRE_GREEN}; --theme-color-complement: {WHITE}; --theme-color-darker: {DARK_CBRE_GREEN};">
+
+	<div id="parallax-image-house">
+		<img class="parallax-image" id="image1" src="house2-actualtransparent.png" alt="house">
+		<img class="parallax-image" id="image2" src="house3-actualtransparent.png" alt="house">
+	</div>
+
 	<div id="welcome" class="fullscreen-page">
 
-		<h1>Welcome to our project!</h1>
+		<h1 id="hero-text">Welcome to our project!</h1>
 
 		<!-- Make an input field with a transparent default text of "Enter an address, zipcode, city, or state" and hide the placeholder on focus -->
 		<form id="zipcode-form" on:submit|preventDefault={scrollToMap}>
@@ -175,6 +193,32 @@
 
 <style>
 
+	#welcome {
+		opacity: 0;
+		transition: 2s;
+	}
+
+	.parallax-image {
+		height: 450px;
+		position: absolute;
+		top: 15%;
+		transition: 2s;
+	}
+
+	#image1 {
+		right: 200px;
+	}
+
+	#image2 {
+		transform: scale(0.8);
+		left: 50px;
+	}
+
+	#hero-text {
+		opacity: 1;
+		z-index: 1000;
+	}
+
 	#summary {
 		justify-content: flex-start;
 	}
@@ -195,7 +239,6 @@
 		margin: 0;
 		padding: 0;
 		overflow-x: hidden;
-		opacity: 0;
 		transition: 3s;
 	}
 
@@ -240,9 +283,9 @@
 		flex-direction: column;
 		align-items: center;
 		border-color: var(--theme-color-darker);
+		z-index: 1000;
 	}
 
-	/* Style the input field similarly to the submit-button */
 	#zipcode-input {
 		text-align: center;
 		padding: 0.5rem 1rem;
@@ -256,7 +299,6 @@
 		width: 100%;
 	}
 
-	/* Style the submit button to be minimalistic and nice */
 	#submit-button {
 		border: 1px solid var(--theme-color-primary);
 		border-radius: 0.25rem;
