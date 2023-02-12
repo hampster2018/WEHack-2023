@@ -5,6 +5,7 @@
 	import { mapCenter, selectedHouse, houses } from './storage';
 	import Saos from "saos";
 	export let ready = false;
+
 	
 	const CBRE_GREEN = '#538184';
 	const DARK_CBRE_GREEN = '#1c293c';
@@ -26,6 +27,17 @@
 		// @ts-ignore
 		document.querySelector('body').style.opacity = 1;
 	});
+
+
+	const fetchValue = async (/** @type {number} */ sqft, /** @type {number} */ acrage, /** @type {number} */ parcelVal, /** @type {string} */ description, /** @type {string} */ city) => {
+    	const url = `http://localhost:5000/${sqft}/${acrage}/${parcelVal}/${description}/${city}`;
+    	const res = await fetch(url);
+    	const data = await res.json();
+    	let value = data['value']
+		console.log(value)
+	};
+	fetchValue(15196, 0.36537, 193080, 'Residential', 'Dallas');
+
 
 	/**
 	 * @type {{ lat: number; lng: number; }}

@@ -6,6 +6,7 @@ import tensorflow as tf
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LinearRegression
+from flask_cors import CORS, cross_origin
 
 dataset = pd.read_csv("perfect.csv")
 
@@ -15,7 +16,7 @@ dataset = pd.get_dummies(dataset, columns=['usedesc'], prefix="useDesc")
 X = dataset.loc[:, dataset.columns != 'landval']
 y = dataset['landval']
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=80)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.15, random_state=101)
 
 s_scaler = StandardScaler()
 X_train = s_scaler.fit_transform(X_train)
@@ -24,6 +25,7 @@ regressor = LinearRegression()
 regressor.fit(X_train, y_train)
 
 app = Flask(__name__)
+CORS(app)
 
 
 cityCodes = {
@@ -43,6 +45,7 @@ useDescCodes = {
 }
 
 @app.route("/<ll_gissqft>/<ll_gisacre>/<parval>/<usedesc>/<city>")
+@cross_origin(origin='*')
 def value(ll_gissqft, ll_gisacre, parval, usedesc, city):
 
     if parval == -1:
@@ -64,4 +67,6 @@ def value(ll_gissqft, ll_gisacre, parval, usedesc, city):
 
     y_pred = regressor.predict(scaled_data)
     value = y_pred[0]
+    if value < 0:
+        value = -value
     return {'value': value}, 201
