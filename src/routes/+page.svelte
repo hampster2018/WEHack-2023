@@ -2,8 +2,7 @@
 	import { onMount } from 'svelte';
 	import Map from './Map.svelte';
 	import { API_KEY } from './api_key';
-	import { mapCenter } from './storage';
-	import { Spinner } from 'flowbite-svelte';
+	import { mapCenter, selectedHouse, houses } from './storage';
 	import Saos from "saos";
 	export let ready = false;
 
@@ -24,25 +23,31 @@
 
 	// Make the body visible after the page loads svelte including the transition
 	onMount(() => {
+		selectedHouse.set(-1);
 		// @ts-ignore
 		document.querySelector('body').style.opacity = 1;
 	});
-
-
-	const fetchValue = async (/** @type {number} */ sqft, /** @type {number} */ acrage, /** @type {number} */ parcelVal, /** @type {string} */ description, /** @type {string} */ city) => {
-    	const url = `http://localhost:5000/${sqft}/${acrage}/${parcelVal}/${description}/${city}`;
-    	const res = await fetch(url);
-    	const data = await res.json();
-    	let value = data['value']
-		console.log(value)
-	};
-	fetchValue(15196, 0.36537, 193080, 'Residential', 'Dallas');
 
 
 	/**
 	 * @type {{ lat: number; lng: number; }}
 	 */
 	let geoselect;
+	
+	/**
+	 * @type {HTMLDivElement}
+	 */
+	let summaryPage;
+
+    selectedHouse.subscribe((value) => {
+		// smooth scroll to the summary page
+		setTimeout(() => {
+			// @ts-ignore
+			if(summaryPage) {
+				summaryPage.scrollIntoView({ behavior: 'smooth' });
+			}
+		}, 100);
+    });
 
 </script>
 
@@ -63,7 +68,7 @@
 				<option value={{lat: 34.07864944413756, lng: -118.13828026065687}}>SoCal</option>
 				<option value={{lat: 39.9398775, lng: -75.2141587}}>Philadelphia</option>
 			</select>
-			<button id="submit-button" >Ready?</button>
+			<button id="submit-button" >Ready</button>
 		</form>
 
 	</div>
@@ -72,24 +77,31 @@
 		<div id="map" class="fullscreen-page">
 			<Map PUBLIC_API_KEY="{API_KEY}" />
 		</div>
+	{/if}
 
-		<div id="summary" class="fullscreen-page">
+	{#if $selectedHouse != -1}
+		<div bind:this={summaryPage} id="summary" class="fullscreen-page">
 			<Saos top={100} once={true} animation={"fade-in 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both"}>
 				<h1>Summary</h1>
 			</Saos>
 
 			<div class="summary-section">
 				<Saos top={100} once={true} animation={"fade-in 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both"}>
-					<h2>The first, and best result would be worth $2.5 million within 10 years.</h2>
+					<h2>
+						This listing is sized at {($houses[$selectedHouse].acres).toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 2})} acre(s), has {$houses[$selectedHouse].bed} bedroom(s), 
+						and {$houses[$selectedHouse].bath} bathroom(s).
+					</h2>
 				</Saos>
 				<Saos top={100} once={true} animation={"fade-in 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both"}>
-					<h2>The second result would be worth $1.3 million within 10 years.</h2>
+					<h2>
+						The current price of the house on the market is 
+						${($houses[$selectedHouse].listingPrice).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}.
+					</h2>
 				</Saos>
 			</div>
 
 		</div>
 	{/if}
-
 </main>
 
 <style>
