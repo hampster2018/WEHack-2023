@@ -103,15 +103,6 @@
                         }, 4000);
                     }, 200);
 
-
-
-                    // infoWindow.close();
-                    // @ts-ignore
-                    // infoWindow.setContent(`<p>${house.sqft} sqft <br /> ${house.bed} bedroom(s) <br /> ${house.bath} bathroom(s) 
-                    //     <br /> ${house.acres} acre(s)</p>`);
-
-                    // @ts-ignore
-                    // infoWindow.open(marker.map, marker);
                 });
             });
 

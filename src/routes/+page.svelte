@@ -95,6 +95,16 @@
 	 * @type {HTMLDivElement}
 	 */
 	let summaryPage;
+
+	/**
+	 * @type {boolean}
+	 */
+	let imageAnimationHappened = false;
+
+	/**
+	 * @type {HTMLImageElement}
+	 */
+	let summaryImage;
 	
 	selectedHouse.subscribe((value) => {
 		// smooth scroll to the summary page
@@ -102,7 +112,17 @@
 			// @ts-ignore
 			if(summaryPage) {
 				// summaryPage.scrollIntoView({ behavior: 'smooth' });
+				const prevTransition = summaryImage.style.transition;
+				summaryImage.style.transition = '0.1s';
+				summaryImage.style.right = '-750px';
+
 				doScrolling(summaryPage, 1500);
+				setTimeout(() => {
+					if(summaryImage) {
+						summaryImage.style.transition = prevTransition;
+						summaryImage.style.right = '50px';	
+					}
+				}, 1000);
 			}
 		}, 100);
 	});
@@ -142,7 +162,7 @@
 
 		<h1 id="hero-text">Welcome to Site In-Sight!</h1>
 
-		<h2 id="hero-subtext">A CBRE initiative to help you find your next investment.</h2>
+		<h2 id="hero-subtext">An initiative to help you find your next investment.</h2>
 
 		<h2 id="hero-subtext2">Select a city to get started.</h2>
 
@@ -175,6 +195,8 @@
 
 	{#if $selectedHouse != -1}
 		<div bind:this={summaryPage} id="summary" class="fullscreen-page">
+
+
 			<Saos top={100} once={true} animation={"fade-in 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both"}>
 				<h1 id="summary-header">Summary</h1>
 			</Saos>
@@ -194,11 +216,13 @@
 					</h2>
 				</Saos>
 
-			</div>
-
 			<div id="spinner-spacer">
 				<Value/>
 			</div>
+
+			</div>
+
+			<img bind:this={summaryImage} id="summary-page-image" src='/houses/{$selectedHouse}.webp' alt="A house">
 
 		</div>
 	{/if}
@@ -206,17 +230,30 @@
 
 <style>
 
+	#summary-page-image {
+		position: absolute;
+		height: 60%;
+		border: 5px solid var(--theme-color-primary);
+		border-radius: 0.5rem;
+		top: 225vh;
+		/* transition from -750px to 50px */
+		right: -750px;
+		transition: 3s;
+	}
+
 	.summary-subtext {
 		margin: 0.25rem;
 	}
 
 	#summary-header {
+		margin-top: 1rem;
 		margin-bottom: 2rem;
 	}
 
 	#spinner-spacer {
+		margin-top: 2rem;
 		height: 100%;
-		width: 100%;
+		width: 50%;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
@@ -364,6 +401,5 @@
 			opacity: 1;
 		}
 	}
-
 
 </style>
