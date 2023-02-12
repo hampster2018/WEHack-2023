@@ -3,6 +3,7 @@
 	import Map from './Map.svelte';
 	import { API_KEY } from './api_key';
 	import { mapCenter } from './storage';
+	import { Spinner } from 'flowbite-svelte';
 	import Saos from "saos";
 	export let ready = false;
 
