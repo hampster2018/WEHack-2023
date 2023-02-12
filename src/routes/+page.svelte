@@ -9,6 +9,7 @@
 	
 	const CBRE_GREEN = '#538184';
 	const DARK_CBRE_GREEN = '#1c293c';
+	const BLACK = '#000000';
 	const WHITE = '#ffffff';
 
 	
@@ -27,7 +28,7 @@
     	let value = data['value']
 		console.log(value)
 	};
-	fetchValue(15196, 0.36537, 193080, 'Residential', 'Dallas');
+	// fetchValue(15196, 0.36537, 193080, 'Residential', 'Dallas');
 	
 	
 	/**
@@ -225,13 +226,13 @@
 	}
 
 	#submit-button:hover {
-		background-color: var(--theme-color-complement);
-		color: var(--theme-color-primary);
+		background-color: var(--theme-color-primary);
+		color: var(--theme-color-complement);
 	}
 
 	/* Animate the button when hovering */
 	#submit-button:hover {
-		transition: 0.3s;
+		transition: 0.5s;
 	}
 
 	#zipcode-form {
@@ -271,12 +272,12 @@
 	}
 
 	@keyframes -global-fade-in {
-	0% {
-		opacity: 0;
-	}
-	100% {
-		opacity: 1;
-	}
+		0% {
+			opacity: 0;
+		}
+		100% {
+			opacity: 1;
+		}
 	}
 
 
