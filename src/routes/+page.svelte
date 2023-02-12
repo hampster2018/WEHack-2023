@@ -140,9 +140,9 @@
 
 	<div id="welcome" class="fullscreen-page">
 
-		<h1 id="hero-text">Welcome to Home In-Sight!</h1>
+		<h1 id="hero-text">Welcome to Site In-Sight!</h1>
 
-		<h2 id="hero-subtext">A CBRE initiative to help you find your next home.</h2>
+		<h2 id="hero-subtext">A CBRE initiative to help you find your next investment.</h2>
 
 		<h2 id="hero-subtext2">Select a city to get started.</h2>
 
@@ -186,14 +186,17 @@
 						and {$houses[$selectedHouse].bath} bathroom(s).
 					</h2>
 				</Saos>
+
 				<Saos top={100} once={true} animation={"fade-in 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both"}>
 					<h2>
 						The current price of the house on the market is 
 						${($houses[$selectedHouse].listingPrice).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}.
 					</h2>
 				</Saos>
-				<Value/>
+
 			</div>
+
+			<Value/>
 
 		</div>
 	{/if}

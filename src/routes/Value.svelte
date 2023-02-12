@@ -1,6 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import { Spinner } from 'flowbite-svelte';
+    import { houses, selectedHouse } from './storage';
 
     /**
      * @type {boolean}
@@ -28,7 +29,9 @@
 
     
      onMount(async () => {
-        let val = await fetchValue(15196, 0.36537, 193080, 'Residential', 'Dallas');
+        let currentHouse = $houses[$selectedHouse];
+        let val = await fetchValue(currentHouse.sqft, currentHouse.acres, currentHouse.parcelValue,
+                                    currentHouse.description, currentHouse.city);
         change(val);
         ready = true;
      })
