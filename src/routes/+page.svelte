@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import Map from './Map.svelte';
 	import { API_KEY } from './api_key';
+	import { mapCenter } from './storage';
 	import Saos from "saos";
 	export let ready = false;
 	
@@ -12,6 +13,7 @@
 	// Write a function that smoothly scrolls to the map on a slight delay after setting ready to true
 	function scrollToMap() {
 		ready = true;
+		mapCenter.set(geoselect);
 		setTimeout(() => {
 			// @ts-ignore
 			document.getElementById('map').scrollIntoView({ behavior: 'smooth' });
@@ -24,9 +26,13 @@
 		document.querySelector('body').style.opacity = 1;
 	});
 
-	let geocode = '';
+	let geoselect;
 
 </script>
+
+<head>
+	<meta name="color-scheme" content="light only">
+</head>
 
 <main id="main" style="--theme-color-primary: {CBRE_GREEN}; --theme-color-complement: {WHITE}; --theme-color-darker: {DARK_CBRE_GREEN};">
 	<div id="welcome" class="fullscreen-page">
@@ -35,7 +41,12 @@
 
 		<!-- Make an input field with a transparent default text of "Enter an address, zipcode, city, or state" and hide the placeholder on focus -->
 		<form id="zipcode-form" on:submit|preventDefault={scrollToMap}>
-			<input id="zipcode-input" type="text" placeholder="Enter a zipcode" bind:value={geocode} />
+			<!-- <input id="zipcode-input" type="text" placeholder="Enter a zipcode" bind:value={geocode} /> -->
+			<select bind:value={geoselect} id="zipcode-input" name="places">
+				<option value={{lat: 32.8209296, lng: -97.0117461}} selected>Dallas</option>
+				<option value={{lat: 34.0207305, lng: -118.6919255}}>SoCal</option>
+				<option value={{lat: 39.9398775, lng: -75.2141587}}>Philadelphia</option>
+			</select>
 			<button id="submit-button" >Ready?</button>
 		</form>
 
@@ -43,19 +54,19 @@
 
 	{#if ready}
 		<div id="map" class="fullscreen-page">
-			<Map PUBLIC_API_KEY="{API_KEY}" geocode="{geocode}" />
+			<Map PUBLIC_API_KEY="{API_KEY}" />
 		</div>
 
 		<div id="summary" class="fullscreen-page">
-			<Saos top={100} once={true} animation={"fade-in 4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both"}>
+			<Saos top={100} once={true} animation={"fade-in 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both"}>
 				<h1>Summary</h1>
 			</Saos>
 
 			<div class="summary-section">
-				<Saos top={100} once={true} animation={"fade-in 4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both"}>
+				<Saos top={100} once={true} animation={"fade-in 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both"}>
 					<h2>The first, and best result would be worth $2.5 million within 10 years.</h2>
 				</Saos>
-				<Saos top={100} once={true} animation={"fade-in 4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both"}>
+				<Saos top={100} once={true} animation={"fade-in 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both"}>
 					<h2>The second result would be worth $1.3 million within 10 years.</h2>
 				</Saos>
 			</div>
@@ -135,7 +146,7 @@
 	}
 
 	/* Style the input field similarly to the submit-button */
-	input {
+	#zipcode-input {
 		text-align: center;
 		padding: 0.5rem 1rem;
 		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -145,7 +156,7 @@
 		color: var(--theme-color-primary);
 		border: 1px solid var(--theme-color-primary);
 		border-radius: 0.25rem;
-		width: 80%;
+		width: 100%;
 	}
 
 	/* Style the submit button to be minimalistic and nice */
@@ -160,7 +171,7 @@
 		font-weight: 300;
 		background-color: var(--theme-color-complement);
 		color: var(--theme-color-primary);
-		width: 50%;
+		width: 60%;
 	}
 
 	@keyframes -global-fade-in {

@@ -2,6 +2,7 @@
 	import { Loader } from '@googlemaps/js-api-loader';
 	import { onMount } from 'svelte';
 	import { API_KEY } from './api_key';
+    import { mapCenter } from './storage';
 
     /**
 	 * @type {string}
@@ -9,40 +10,22 @@
      export let PUBLIC_API_KEY;
 
     /**
-	 * @type {string}
-	 */
-     export let geocode;
-
-    /**
 	 * @type {HTMLDivElement}
 	 */
     let container;
 
+    /**
+	 * @type {google.maps.Map<HTMLDivElement>}
+	 */
+    let map;
+
+    /**
+     * @type {number}
+     */
+    let zoom = 8;
+
     onMount(async () => {
-        const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${geocode}&key=${API_KEY}`;
-        const apiData = await fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                return data;
-            }).catch(error => {
-                console.error(error);
-            });
 
-        /**
-         * @type {HTMLDivElement}
-         */
-        let map;
-        let zoom = 8;
-
-        let center = { lat: 32.7916841, lng: -96.8004513};
-        // @ts-ignore
-        if(apiData.results && apiData.results.length > 0) {
-            // @ts-ignore
-            const { lat, lng } = apiData.results[0].geometry.location;
-            center = { lat, lng };
-            zoom = 16;
-        }
 
         const loader = new Loader({
             apiKey: PUBLIC_API_KEY,
@@ -69,19 +52,19 @@
         ]
 
     const mapOptions = {
-        center: center,
+        center: $mapCenter,
         zoom: zoom,
         styles: stylesArray,
     };
     
     loader.load().then((google) => {
             // @ts-ignore
-            const map = new google.maps.Map(container, mapOptions);
+            map = new google.maps.Map(container, mapOptions);
             
             const infoWindow = new google.maps.InfoWindow();
             
             const marker = new google.maps.Marker({
-                position: center,
+                position: $mapCenter,
                 map: map,
                 title: "CBRE Main Office!",
             });
@@ -103,7 +86,12 @@
 
     });
 
-
+    mapCenter.subscribe((value) => {
+        if(map) {
+            map.setCenter(value);
+            map.setZoom(8);
+        }
+    });
 
 </script>
 
