@@ -2,6 +2,7 @@
     import { onMount } from 'svelte';
     import { Spinner } from 'flowbite-svelte';
     import { houses, selectedHouse } from './storage';
+	import Saos from "saos";
 
     /**
      * @type {boolean}
@@ -43,7 +44,9 @@
         <Spinner size={'20'} />
     </div>
     {:else}
-        <div id="valueText">The value is ${Number(value).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
+        <Saos top={100} once={true} animation={"fade-in 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both"}>
+            <div id="valueText">The value is ${Number(value).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
+        </Saos>
     {/if}
 </main>
 
@@ -58,4 +61,13 @@
         justify-content: center;
         height: 100%;
     }
+
+	@keyframes -global-fade-in {
+		0% {
+			opacity: 0;
+		}
+		100% {
+			opacity: 1;
+		}
+	}
 </style>
