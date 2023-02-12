@@ -1,6 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import Map from './Map.svelte';
+	import Value from './Value.svelte'
 	import { API_KEY } from './api_key';
 	import { mapCenter, selectedHouse, houses } from './storage';
 	import Saos from "saos";
@@ -98,6 +99,7 @@
 						${($houses[$selectedHouse].listingPrice).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}.
 					</h2>
 				</Saos>
+				<Value/>
 			</div>
 
 		</div>
