@@ -23,7 +23,7 @@
 			let image1 = document.getElementById('image1');
 			let image2 = document.getElementById('image2');
 			// @ts-ignore
-			image1.style.right = `${Number(image1.style.right) - 100}px`;
+			image1.style.right = `${Number(image1.style.right) - 110}px`;
 			// @ts-ignore
 			image2.style.left = `${Number(image2.style.left) - 230}px`;
 			setTimeout(() => {
@@ -135,7 +135,11 @@
 
 	<div id="welcome" class="fullscreen-page">
 
-		<h1 id="hero-text">Welcome to our project!</h1>
+		<h1 id="hero-text">Welcome to Home In-Sight!</h1>
+
+		<h2 id="hero-subtext">A CBRE initiative to help you find your next home.</h2>
+
+		<h2 id="hero-subtext2">Select a city to get started.</h2>
 
 		<!-- Make an input field with a transparent default text of "Enter an address, zipcode, city, or state" and hide the placeholder on focus -->
 		<form id="zipcode-form" on:submit|preventDefault={scrollToMap}>
@@ -208,6 +212,15 @@
 	#hero-text {
 		opacity: 1;
 		z-index: 1000;
+	}
+
+	#hero-subtext {
+		/* Add a little more padding on bottom */
+	}
+
+	#hero-subtext2 {
+		/* Add a little more padding on bottom */
+		padding-bottom: 1rem;
 	}
 
 	#summary {
