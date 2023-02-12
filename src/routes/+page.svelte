@@ -280,7 +280,7 @@
 
 				<Saos top={100} once={true} animation={"fade-in 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both"}>
 					<h2 class="summary-subtext">
-						Further, it also boasts {($houses[$selectedHouse].sqft).toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})} square feet of space.
+						Further, it boasts {($houses[$selectedHouse].sqft).toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})} square feet of space.
 					</h2>
 				</Saos>
 
