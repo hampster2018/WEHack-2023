@@ -5,7 +5,9 @@
 	import { API_KEY } from './api_key';
 	import { mapCenter, selectedHouse, houses } from './storage';
 	import Saos from "saos";
+	import InputForm from './InputForm.svelte';
 	export let ready = false;
+	export let formReady = false;
 
 	
 	const CBRE_GREEN = '#538184';
@@ -112,17 +114,42 @@
 	 */
 	let map;
 
+	/**
+	 * @type {HTMLDivElement}
+	 */
+	 let form;
+
 	// Write a function that smoothly scrolls to the map on a slight delay after setting ready to true
-	function scrollToMap() {
-		ready = true;
-		mapCenter.set(geoselect);
-		setTimeout(() => {
+	/**
+	 * @param {number} type
+	 */
+	function scrollToMap(type) {
+		if (type == 0){
+			ready = true;
+			formReady = false;
+			mapCenter.set(geoselect);
+			setTimeout(() => {
 			// @ts-ignore
-			if(map) {
-				map.scrollIntoView({ behavior: 'smooth' });
-				// doScrolling(map, 1000);
+				if(map) {
+					map.scrollIntoView({ behavior: 'smooth' });
+					// doScrolling(map, 1000);
+				}
+			}, 1);
+		}
+		else {
+			formReady = true;
+			ready = false;
+			if (form) {
+				setTimeout(() => {
+			// @ts-ignore
+				if(form) {
+					form.scrollIntoView({ behavior: 'smooth' });
+					// doScrolling(map, 1000);
+				}
+			}, 1);
 			}
-		}, 1);
+			console.log(formReady)
+		}
 	}
 
 </script>
@@ -147,7 +174,7 @@
 		<h2 id="hero-subtext2">Select a city to get started.</h2>
 
 		<!-- Make an input field with a transparent default text of "Enter an address, zipcode, city, or state" and hide the placeholder on focus -->
-		<form id="zipcode-form" on:submit|preventDefault={scrollToMap}>
+		<form id="zipcode-form" on:submit|preventDefault={() => scrollToMap(0)}>
 			<!-- <input id="zipcode-input" type="text" placeholder="Enter a zipcode" bind:value={geocode} /> -->
 			<select bind:value={geoselect} id="zipcode-input" name="places">
 				<option value={{lat: 32.76147508980729, lng: -96.78377976258415}} selected>Dallas</option>
@@ -163,6 +190,9 @@
 				<option value={100_000}>Less than $100,000 income</option>
 			</select>
 			<button id="submit-button" >Ready</button>
+		</form>
+		<form id="submit-form" on:submit|preventDefault={() => scrollToMap(1)}>
+			<button id="selfSubmit">Submit your own data</button>
 		</form>
 
 	</div>
@@ -200,6 +230,16 @@
 
 		</div>
 	{/if}
+
+	{#if formReady}
+		<div bind:this={form} id="form" class="fullscreen-page">
+			<InputForm />
+		</div>
+	{/if}
+
+
+
+
 </main>
 
 <style>
@@ -308,6 +348,16 @@
 		transition: 0.5s;
 	}
 
+	#selfSubmit:hover {
+		background-color: var(--theme-color-primary);
+		color: var(--theme-color-complement);
+	}
+
+	/* Animate the button when hovering */
+	#selfSubmit:hover {
+		transition: 0.5s;
+	}
+
 	#zipcode-form {
 		display: flex;
 		flex-direction: column;
@@ -335,6 +385,20 @@
 		background-color: var(--theme-color-complement);
 		color: var(--theme-color-primary);
 		width: 60%;
+	}
+
+	#selfSubmit {
+		border: 1px solid var(--theme-color-primary);
+		border-radius: 0.25rem;
+		margin-top: 1rem;
+		cursor: pointer;
+		padding: 0.5rem 1rem;
+		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+		font-size: 1.5rem;
+		font-weight: 300;
+		background-color: var(--theme-color-complement);
+		color: var(--theme-color-primary);
+		width: 80%;
 	}
 
 	@keyframes -global-fade-in {

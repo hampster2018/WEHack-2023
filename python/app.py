@@ -5,7 +5,7 @@ import pandas as pd
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LogisticRegression
 from flask_cors import CORS, cross_origin
 
 dataset = pd.read_csv("perfect.csv")
@@ -21,7 +21,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.15, random
 s_scaler = StandardScaler()
 X_train = s_scaler.fit_transform(X_train)
 
-regressor = LinearRegression()  
+regressor = LogisticRegression()  
 regressor.fit(X_train, y_train)
 
 app = Flask(__name__)
