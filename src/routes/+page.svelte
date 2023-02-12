@@ -3,6 +3,8 @@
 	import Map from './Map.svelte';
 	import { API_KEY } from './api_key';
 	export let ready = false;
+	
+	const CBRE_GREEN = '#24292f';
 
 	// Write a function that smoothly scrolls to the map on a slight delay after setting ready to true
 	function scrollToMap() {
@@ -19,22 +21,30 @@
 		document.querySelector('body').style.opacity = 1;
 	});
 
+	let geocode = '';
+
 </script>
 
 <main id="main">
 	<div id="welcome" class="fullscreen-page">
+
 		<h1>Welcome to our project!</h1>
 
 		<!-- Make an input field with a transparent default text of "Enter an address, zipcode, city, or state" and hide the placeholder on focus -->
 		<form id="zipcode-form" on:submit|preventDefault={scrollToMap}>
-			<input id="zipcode-input" type="text" placeholder="Enter a zipcode" />
+			<input id="zipcode-input" type="text" placeholder="Enter a zipcode" bind:value={geocode} />
 			<button id="submit-button" >Ready?</button>
 		</form>
+
 	</div>
 
 	{#if ready}
 		<div id="map" class="fullscreen-page">
-			<Map PUBLIC_API_KEY="{API_KEY}" />
+			<Map PUBLIC_API_KEY="{API_KEY}" geocode="{geocode}" />
+		</div>
+
+		<div id="summary" class="fullscreen-page">
+			<h1>Summary</h1>
 		</div>
 	{/if}
 
@@ -111,6 +121,10 @@
 		background-color: #FFF;
 		color: #000;
 		width: 50%;
+	}
+
+	#summary {
+		justify-content: flex-start;
 	}
 
 </style>
