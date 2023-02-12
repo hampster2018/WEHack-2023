@@ -23,7 +23,7 @@ export const houses = writable([
 		acres: 0.72,
 		parcelValue: -1,
 		description: 'Residential',
-		city: 'SoCal',
+		city: 'Socal',
 		coords: {lat: 34.24962180644662, lng: -118.46039023140953}
 	},
 	{
@@ -89,7 +89,7 @@ export const houses = writable([
 		acres: 0.56,
 		parcelValue: -1,
 		description: 'Residential',
-		city: 'SoCal',
+		city: 'Socal',
 		coords: {lat: 34.14626458676211, lng: -118.52350340257644}
 	},
 	{
@@ -100,7 +100,7 @@ export const houses = writable([
 		acres: 0.04990817,
 		parcelValue: -1,
 		description: 'Residential',
-		city: 'SoCal',
+		city: 'Socal',
 		coords: {lat: 34.209292525837554, lng: -118.46342988908222}
 	},
 	{
@@ -111,7 +111,7 @@ export const houses = writable([
 		acres: 5.15,
 		parcelValue: -1,
 		description: 'Residential',
-		city: 'SoCal',
+		city: 'Socal',
 		coords: {lat: 34.184025106457874, lng: -118.59838410257532}
 	},
 	{
@@ -122,7 +122,7 @@ export const houses = writable([
 		acres: 0.137741,
 		parcelValue: -1,
 		description: 'Residential',
-		city: 'SoCal',
+		city: 'Socal',
 		coords: {lat: 34.14368193965825, lng: -118.41236480257645}
 	},
 	{
