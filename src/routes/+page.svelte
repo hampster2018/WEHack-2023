@@ -3,7 +3,7 @@
 	import Map from './Map.svelte';
 	import Value from './Value.svelte'
 	import { API_KEY } from './api_key';
-	import { mapCenter, selectedHouse, houses } from './storage';
+	import { mapCenter, selectedHouse, houses, tempHouse } from './storage';
 	import Saos from "saos";
 	import InputForm from './InputForm.svelte';
 	export let ready = false;
@@ -19,6 +19,17 @@
 	// Make the body visible after the page loads svelte including the transition
 	onMount(() => {
 		selectedHouse.set(-1);
+		tempHouse.set({
+			sqft: -1,
+			listingPrice: -1,
+			bed: -1,
+			bath: -1,
+			acres: -1,
+			parcelValue: -1,
+			description: '',
+			city: '',
+			coords: {lat: -1, lng: -1}
+		});
 		// @ts-ignore
 
 		setTimeout(() => {
@@ -107,6 +118,29 @@
 	 * @type {HTMLImageElement}
 	 */
 	let summaryImage;
+
+	/**
+	 * @type {HTMLImageElement}
+	 */
+	let formSummaryPage;
+
+	tempHouse.subscribe((value) => {
+		setTimeout(() => {
+			if(formSummaryPage) {
+				const prevTransition = summaryImage.style.transition;
+				summaryImage.style.transition = '0.1s';
+				summaryImage.style.right = '-750px';
+
+				doScrolling(formSummaryPage, 1500);
+				setTimeout(() => {
+					if(summaryImage) {
+						summaryImage.style.transition = prevTransition;
+						summaryImage.style.right = '50px';	
+					}
+				}, 1000);
+			}
+		}, 100);
+	});
 	
 	selectedHouse.subscribe((value) => {
 		// smooth scroll to the summary page
@@ -158,16 +192,15 @@
 		}
 		else {
 			formReady = true;
+			selectedHouse.set(-1);
 			ready = false;
-			if (form) {
-				setTimeout(() => {
+			setTimeout(() => {
 			// @ts-ignore
 				if(form) {
 					form.scrollIntoView({ behavior: 'smooth' });
 					// doScrolling(map, 1000);
 				}
 			}, 1);
-			}
 			console.log(formReady)
 		}
 	}
@@ -216,10 +249,16 @@
 		</form>
 
 	</div>
-
+	
 	{#if ready}
-		<div bind:this={map} id="map" class="fullscreen-page">
+	<div bind:this={map} id="map" class="fullscreen-page">
 			<Map PUBLIC_API_KEY="{API_KEY}" />
+		</div>
+	{/if}
+
+	{#if formReady}
+		<div bind:this={form} id="form" class="fullscreen-page">
+			<InputForm />
 		</div>
 	{/if}
 
@@ -234,8 +273,14 @@
 			<div class="summary-section">
 				<Saos top={100} once={true} animation={"fade-in 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both"}>
 					<h2 class="summary-subtext">
-						This listing is sized at {($houses[$selectedHouse].acres).toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 2})} acre(s), has {$houses[$selectedHouse].bed} bedroom(s), 
+						This listing is sized at {($houses[$selectedHouse].acres).toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 2})} acre(s), has {$houses[$selectedHouse].bed} bedroom(s),
 						and {$houses[$selectedHouse].bath} bathroom(s).
+					</h2>
+				</Saos>
+
+				<Saos top={100} once={true} animation={"fade-in 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both"}>
+					<h2 class="summary-subtext">
+						Further, it also boasts {($houses[$selectedHouse].sqft).toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})} square feet of space.
 					</h2>
 				</Saos>
 
@@ -255,16 +300,38 @@
 			<img bind:this={summaryImage} id="summary-page-image" src='/houses/{$selectedHouse}.webp' alt="A house">
 
 		</div>
-	{/if}
+	{:else if $tempHouse.acres != -1}
+		<div bind:this={formSummaryPage} id="summary" class="fullscreen-page">
 
-	{#if formReady}
-		<div bind:this={form} id="form" class="fullscreen-page">
-			<InputForm />
+
+			<Saos top={100} once={true} animation={"fade-in 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both"}>
+				<h1 id="summary-header">Summary</h1>
+			</Saos>
+
+			<div class="summary-section">
+				<Saos top={100} once={true} animation={"fade-in 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both"}>
+					<h2 class="summary-subtext">
+						This listing is sized at {($tempHouse.acres).toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 2})} acre(s) with {($tempHouse.sqft).toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 2})} sqft.
+					</h2>
+				</Saos>
+
+				<!-- <Saos top={100} once={true} animation={"fade-in 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both"}>
+					<h2 class="summary-subtext">
+						The current price of the house on the market is 
+						${($tempHouse.listingPrice).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}.
+					</h2>
+				</Saos> -->
+
+			<div id="spinner-spacer">
+				<Value/>
+			</div>
+
+			</div>
+
+			<img bind:this={summaryImage} id="summary-page-image" src='/houses/{0}.webp' alt="A house">
+
 		</div>
 	{/if}
-
-
-
 
 </main>
 
@@ -342,7 +409,7 @@
 
 	#hero-subtext2 {
 		/* Add a little more padding on bottom */
-		padding-bottom: 0.1rem;
+		padding-bottom: 1rem;
 	}
 
 	#summary {

@@ -15,7 +15,7 @@
      */
      let value;
 
-     const fetchValue = async (/** @type {number} */ sqft, /** @type {number} */ acrage, /** @type {number} */ parcelVal, /** @type {string} */ description, /** @type {string} */ city) => {
+    const fetchValue = async (/** @type {number} */ sqft, /** @type {number} */ acrage, /** @type {number} */ parcelVal, /** @type {string} */ description, /** @type {string} */ city) => {
     	const url = `http://localhost:5000/${sqft}/${acrage}/${parcelVal}/${description}/${city}`;
     	const res = await fetch(url).then(async (data) => {
             return await data.json()
@@ -24,17 +24,16 @@
         });
         console.log(res['value'])
         return (res['value'])
-
 	};
 
     
-     onMount(async () => {
+    onMount(async () => {
         let currentHouse = $houses[$selectedHouse];
         let val = await fetchValue(currentHouse.sqft, currentHouse.acres, currentHouse.parcelValue,
                                     currentHouse.description, currentHouse.city);
         change(val);
         ready = true;
-     })
+    });
 
 </script>
 

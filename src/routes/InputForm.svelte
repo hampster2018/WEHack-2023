@@ -1,5 +1,6 @@
 <script>
-    import {Label, Input, Select, Checkbox, Button} from 'flowbite-svelte'
+    import {Label, Input, Select, Checkbox, Button} from 'flowbite-svelte';
+    import { tempHouse } from './storage';
 
     /**
 	 * @type {any}
@@ -38,28 +39,56 @@
 
     // @ts-ignore
     const clickCheck = () => {
+        // @ts-ignore
         if (document.getElementById("extra").style.opacity == "0") {
+            // @ts-ignore
             document.getElementById("extra").style.opacity = "1"
         }
         else {
+            // @ts-ignore
             document.getElementById("extra").style.opacity = "0"
         }
     }
 
+    /**
+	 * @type {any}
+	 */
+    let formSqft;
+    /**
+	 * @type {any}
+	 */
+    let formAcres;
+    /**
+	 * @type {any}
+	 */
+    let formParcel;
+    /**
+	 * @type {any}
+	 */
+    let formIncome;
+
     const submitForm = () => {
-        let uri = `http://localhost:5000/${sqft}/${acrage}/${parcelVal}/${description}/${city}`
+        // @ts-ignore
+        tempHouse.set({
+            sqft: Number(formSqft ?? 0),
+            acres: Number(formAcres ?? 0),
+            parcelValue: Number(formParcel ?? 0),
+            description: descSelected,
+            city: citySelected
+        })
     }
+    
 
 </script>
 
 <main id="theMain">
     <div class="div1">
         <Label for='large-input' class='block mb-2'>How many square feet is the property?</Label>
-        <Input id="large-input" size="lg" placeholder="square feet" />
+        <Input required bind:value={formSqft} id="large-input" size="lg" placeholder="square feet" />
     </div>
     <div class="div1">
         <Label for='large-input' class='block mb-2'>How many acres is the property?</Label>
-        <Input id="large-input" size="lg" placeholder="acres" />
+        <Input required bind:value={formAcres} id="large-input" size="lg" placeholder="acres" />
     </div>
     <div class="div1">
         <Label>Select what type of zone the property is
@@ -80,16 +109,16 @@
     <div id="extra">
         <div class="div1">
             <Label for='large-input' class='block mb-2'>What is the parcel value of the property?</Label>
-            <Input id="large-input" size="lg" placeholder="Parcel Value" />
+            <Input bind:value={formParcel} id="large-input" size="lg" placeholder="Parcel Value" />
         </div>
         <div class = "div1">
             <Label for='large-input' class='block mb-2'>What is the mean family income of the area?</Label>
-            <Input id="large-input" size="lg" placeholder="Mean Family Income" />
+            <Input bind:value={formIncome} id="large-input" size="lg" placeholder="Mean Family Income" />
         </div>
     </div>
 
     <div>
-        <Button color="dark" on:click = {() => submitForm}>Check Value</Button>
+        <Button color="dark" on:click = {submitForm}>Check Value</Button>
     </div>
 
 </main>

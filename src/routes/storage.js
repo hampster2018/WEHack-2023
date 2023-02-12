@@ -175,3 +175,15 @@ export const houses = writable([
  * @type {import('svelte/store').Writable<number>}
  */
 export const selectedHouse = writable(-1);
+
+export const tempHouse = writable({
+	sqft: -1,
+	listingPrice: -1,
+	bed: -1,
+	bath: -1,
+	acres: -1,
+	parcelValue: -1,
+	description: '',
+	city: '',
+	coords: {lat: -1, lng: -1}
+});
