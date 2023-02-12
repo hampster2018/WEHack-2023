@@ -1,8 +1,12 @@
 <script>
     import { onMount } from 'svelte';
-    import { Spinner } from 'flowbite-svelte';
-    import { houses, selectedHouse } from './storage';
+    import { CardPlaceholder, Spinner } from 'flowbite-svelte';
+    import { houses, selectedHouse, tempHouse } from './storage';
 	import Saos from "saos";
+    /**
+	 * @type {any}
+	 */
+     export let caller;
 
     /**
      * @type {boolean}
@@ -29,7 +33,7 @@
 
     
     onMount(async () => {
-        let currentHouse = $houses[$selectedHouse];
+        let currentHouse = caller == 'temp' ? $tempHouse : $houses[$selectedHouse] ;
         let val = await fetchValue(currentHouse.sqft, currentHouse.acres, currentHouse.parcelValue,
                                     currentHouse.description, currentHouse.city);
         change(val);

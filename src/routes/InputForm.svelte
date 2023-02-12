@@ -17,19 +17,19 @@
     let form;
 
     let useDescCodes = [
-    {value: 'Commercial', name: 'Commercial'},
-    {value: 'Commercial Office', name: 'Commercial Office'},
-    {value: 'Commercial Store', name: 'Commercial Store'},
-    {value: 'Industrial', name: 'Industrial'},
-    {value: 'Unzoned', name: 'Unzoned'},
-    {value: 'Residential', name: 'Residential'},
-    {value: 'Single Residential', name: 'Single Residential'},
+        {value: 'Commercial', name: 'Commercial'},
+        {value: 'Commercial Office', name: 'Commercial Office'},
+        {value: 'Commercial Store', name: 'Commercial Store'},
+        {value: 'Industrial', name: 'Industrial'},
+        {value: 'Unzoned', name: 'Unzoned'},
+        {value: 'Residential', name: 'Residential'},
+        {value: 'Single Residential', name: 'Single Residential'},
     ]
 
     let useCityData = [
-        {value: '50000,30000', name: 'Dallas'},
-        {value: '50000,30000', name: 'Philadelphia'},
-        {value: '50000,30000', name: 'Socal'}
+        {value: 'Dallas', name: 'Dallas'},
+        {value: 'Philadelphia', name: 'Philadelphia'},
+        {value: 'Socal', name: 'Socal'}
     ]
 
     /**

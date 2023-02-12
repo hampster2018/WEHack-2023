@@ -292,7 +292,7 @@
 				</Saos>
 
 			<div id="spinner-spacer">
-				<Value/>
+				<Value caller={'notTemp'} />
 			</div>
 
 			</div>
@@ -323,7 +323,7 @@
 				</Saos> -->
 
 			<div id="spinner-spacer">
-				<Value/>
+				<Value caller={'temp'}/>
 			</div>
 
 			</div>
