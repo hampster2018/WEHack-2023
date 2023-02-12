@@ -41,9 +41,22 @@
 <main>
     {#if !ready}
     <div>
-        <Spinner />
+        <Spinner size={'20'} />
     </div>
     {:else}
-        <div>The value is ${value}</div>
+        <div id="valueText">The value is ${Number(value).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
     {/if}
 </main>
+
+<style>
+    #valueText {
+		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+		font-size: 5rem;
+		font-weight: 300;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+    }
+</style>

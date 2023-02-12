@@ -156,11 +156,11 @@
 			</select>
 
 			<select bind:value={incomeRestriction} id="income-input" name="places">
-				<option value={-1} selected>No income restriction</option>
-				<option value={15_000}>Less than $15,000 income</option>
-				<option value={25_000}>Less than $25,000 income</option>
-				<option value={50_000}>Less than $50,000 income</option>
-				<option value={100_000}>Less than $100,000 income</option>
+				<option value={-1} selected>No average income</option>
+				<option value={15_000}>Average $15,000 income</option>
+				<option value={25_000}>Average $25,000 income</option>
+				<option value={50_000}>Average $50,000 income</option>
+				<option value={100_000}>Average $100,000 income</option>
 			</select>
 			<button id="submit-button" >Ready</button>
 		</form>
@@ -176,19 +176,19 @@
 	{#if $selectedHouse != -1}
 		<div bind:this={summaryPage} id="summary" class="fullscreen-page">
 			<Saos top={100} once={true} animation={"fade-in 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both"}>
-				<h1>Summary</h1>
+				<h1 id="summary-header">Summary</h1>
 			</Saos>
 
 			<div class="summary-section">
 				<Saos top={100} once={true} animation={"fade-in 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both"}>
-					<h2>
+					<h2 class="summary-subtext">
 						This listing is sized at {($houses[$selectedHouse].acres).toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 2})} acre(s), has {$houses[$selectedHouse].bed} bedroom(s), 
 						and {$houses[$selectedHouse].bath} bathroom(s).
 					</h2>
 				</Saos>
 
 				<Saos top={100} once={true} animation={"fade-in 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both"}>
-					<h2>
+					<h2 class="summary-subtext">
 						The current price of the house on the market is 
 						${($houses[$selectedHouse].listingPrice).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}.
 					</h2>
@@ -196,13 +196,32 @@
 
 			</div>
 
-			<Value/>
+			<div id="spinner-spacer">
+				<Value/>
+			</div>
 
 		</div>
 	{/if}
 </main>
 
 <style>
+
+	.summary-subtext {
+		margin: 0.25rem;
+	}
+
+	#summary-header {
+		margin-bottom: 2rem;
+	}
+
+	#spinner-spacer {
+		height: 100%;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
 
 	select {
 		text-align: center;
