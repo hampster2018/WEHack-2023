@@ -26,6 +26,12 @@
         {value: 'Single Residential', name: 'Single Residential'},
     ]
 
+    let useCityParcel = [
+        {value: '50000', name: 'Dallas'},
+        {value: '50000', name: 'Philadelphia'},
+        {value: '50000', name: 'Socal'}
+    ]
+
     let useCityData = [
         {value: 'Dallas', name: 'Dallas'},
         {value: 'Philadelphia', name: 'Philadelphia'},
