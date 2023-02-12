@@ -10,18 +10,10 @@
 	
 	const CBRE_GREEN = '#538184';
 	const DARK_CBRE_GREEN = '#1c293c';
+	const BLACK = '#000000';
 	const WHITE = '#ffffff';
 
-	// Write a function that smoothly scrolls to the map on a slight delay after setting ready to true
-	function scrollToMap() {
-		ready = true;
-		mapCenter.set(geoselect);
-		setTimeout(() => {
-			// @ts-ignore
-			document.getElementById('map').scrollIntoView({ behavior: 'smooth' });
-		}, 1);
-	}
-
+	
 	// Make the body visible after the page loads svelte including the transition
 	onMount(() => {
 		selectedHouse.set(-1);
@@ -29,26 +21,92 @@
 		document.querySelector('body').style.opacity = 1;
 	});
 
-
 	/**
 	 * @type {{ lat: number; lng: number; }}
 	 */
 	let geoselect;
 	
+	// getElementY and doScrolling remade for svelte from https://stackoverflow.com/questions/17722497/scroll-smoothly-to-specific-element-on-page
+	/**
+	 * @param {HTMLDivElement} element
+	 */
+	function getElementY(element) {
+		return window.pageYOffset + element.getBoundingClientRect().top
+	}
+	
+	/**
+	 * @param {HTMLDivElement} element
+	 * @param {number} duration
+	 */
+	function doScrolling(element, duration) {
+		var startingY = window.pageYOffset
+		var elementY = getElementY(element)
+		// If element is close to page's bottom then window will scroll only to some position above the element.
+		var targetY = document.body.scrollHeight - elementY < window.innerHeight ? document.body.scrollHeight - window.innerHeight : elementY
+		var diff = targetY - startingY
+		// Easing function: easeInOutCubic
+		// From: https://gist.github.com/gre/1650294
+		var easing = function (/** @type {number} */ t) { return t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1 }
+		/**
+		 * @type {number}
+		 */
+		var start
+		
+		if (!diff) return
+		
+		// Bootstrap our animation - it will get called right before next frame shall be rendered.
+		window.requestAnimationFrame(function step(timestamp) {
+			if (!start) start = timestamp
+			// Elapsed miliseconds since start of scrolling.
+			var time = timestamp - start
+			// Get percent of completion in range [0, 1].
+			var percent = Math.min(time / duration, 1)
+			// Apply the easing.
+			// It can cause bad-looking slow frames in browser performance tool, so be careful.
+			percent = easing(percent)
+			
+			window.scrollTo(0, startingY + diff * percent)
+			
+			// Proceed with animation as long as we wanted it to.
+			if (time < duration) {
+				window.requestAnimationFrame(step)
+			}
+		})
+	}
+	
 	/**
 	 * @type {HTMLDivElement}
 	 */
 	let summaryPage;
-
-    selectedHouse.subscribe((value) => {
+	
+	selectedHouse.subscribe((value) => {
 		// smooth scroll to the summary page
 		setTimeout(() => {
 			// @ts-ignore
 			if(summaryPage) {
-				summaryPage.scrollIntoView({ behavior: 'smooth' });
+				// summaryPage.scrollIntoView({ behavior: 'smooth' });
+				doScrolling(summaryPage, 1500);
 			}
 		}, 100);
-    });
+	});
+
+	/**
+	 * @type {HTMLDivElement}
+	 */
+	let map;
+
+	// Write a function that smoothly scrolls to the map on a slight delay after setting ready to true
+	function scrollToMap() {
+		ready = true;
+		mapCenter.set(geoselect);
+		setTimeout(() => {
+			// @ts-ignore
+			if(map) {
+				map.scrollIntoView({ behavior: 'smooth' });
+				// doScrolling(map, 1000);
+			}
+		}, 1);
+	}
 
 </script>
 
@@ -75,7 +133,7 @@
 	</div>
 
 	{#if ready}
-		<div id="map" class="fullscreen-page">
+		<div bind:this={map} id="map" class="fullscreen-page">
 			<Map PUBLIC_API_KEY="{API_KEY}" />
 		</div>
 	{/if}
@@ -159,13 +217,13 @@
 	}
 
 	#submit-button:hover {
-		background-color: var(--theme-color-complement);
-		color: var(--theme-color-primary);
+		background-color: var(--theme-color-primary);
+		color: var(--theme-color-complement);
 	}
 
 	/* Animate the button when hovering */
 	#submit-button:hover {
-		transition: 0.3s;
+		transition: 0.5s;
 	}
 
 	#zipcode-form {
@@ -205,12 +263,12 @@
 	}
 
 	@keyframes -global-fade-in {
-	0% {
-		opacity: 0;
-	}
-	100% {
-		opacity: 1;
-	}
+		0% {
+			opacity: 0;
+		}
+		100% {
+			opacity: 1;
+		}
 	}
 
 
