@@ -33,7 +33,7 @@
          * @type {HTMLDivElement}
          */
         let map;
-        let zoom = 12;
+        let zoom = 8;
 
         let center = { lat: 32.7916841, lng: -96.8004513};
         // @ts-ignore
@@ -44,25 +44,42 @@
             zoom = 16;
         }
 
-
-
         const loader = new Loader({
             apiKey: PUBLIC_API_KEY,
         });
+        
+        var stylesArray = [
+            {
+                "featureType": "poi.business",
+                "stylers": [
+                {
+                    "visibility": "off"
+                }
+                ]
+            },
+            {
+                "featureType": "poi.park",
+                "elementType": "labels.text",
+                "stylers": [
+                {
+                    "visibility": "off"
+                }
+                ]
+            }
+        ]
 
-        const mapOptions = {
-            center: center,
-            zoom: zoom,
-        };
-
-        loader.load().then((google) => {
-            // The initMap function alternative
-
+    const mapOptions = {
+        center: center,
+        zoom: zoom,
+        styles: stylesArray,
+    };
+    
+    loader.load().then((google) => {
             // @ts-ignore
             const map = new google.maps.Map(container, mapOptions);
-
+            
             const infoWindow = new google.maps.InfoWindow();
-
+            
             const marker = new google.maps.Marker({
                 position: center,
                 map: map,
@@ -71,6 +88,8 @@
 
             marker.addListener("click", ({ domEvent, latLng }) => {
                 const { target } = domEvent;
+
+                console.log(`Click at: ${latLng.lat()}, ${latLng.lng()}`);
 
                 infoWindow.close();
                 // @ts-ignore

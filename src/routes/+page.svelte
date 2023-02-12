@@ -2,9 +2,12 @@
 	import { onMount } from 'svelte';
 	import Map from './Map.svelte';
 	import { API_KEY } from './api_key';
+	import Saos from "saos";
 	export let ready = false;
 	
-	const CBRE_GREEN = '#24292f';
+	const CBRE_GREEN = '#538184';
+	const DARK_CBRE_GREEN = '#1c293c';
+	const WHITE = '#ffffff';
 
 	// Write a function that smoothly scrolls to the map on a slight delay after setting ready to true
 	function scrollToMap() {
@@ -25,7 +28,7 @@
 
 </script>
 
-<main id="main">
+<main id="main" style="--theme-color-primary: {CBRE_GREEN}; --theme-color-complement: {WHITE}; --theme-color-darker: {DARK_CBRE_GREEN};">
 	<div id="welcome" class="fullscreen-page">
 
 		<h1>Welcome to our project!</h1>
@@ -44,13 +47,41 @@
 		</div>
 
 		<div id="summary" class="fullscreen-page">
-			<h1>Summary</h1>
+			<Saos top={100} once={true} animation={"fade-in 4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both"}>
+				<h1>Summary</h1>
+			</Saos>
+
+			<div class="summary-section">
+				<Saos top={100} once={true} animation={"fade-in 4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both"}>
+					<h2>The first, and best result would be worth $2.5 million within 10 years.</h2>
+				</Saos>
+				<Saos top={100} once={true} animation={"fade-in 4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both"}>
+					<h2>The second result would be worth $1.3 million within 10 years.</h2>
+				</Saos>
+			</div>
+
 		</div>
 	{/if}
 
 </main>
 
 <style>
+
+	#summary {
+		justify-content: flex-start;
+	}
+
+	.summary-section {
+		display: flex;
+		flex-direction: column;
+		/* Align the items on the left of the screen */
+		align-items: flex-start;
+		/* Make the items take up the full width of the screen */
+		width: 95%;
+		/* Add padding, 10% on left and right. */
+		margin-left: 2.5%;
+		margin-right: 2.5%;
+	}
 
 	:global(body) {
 		margin: 0;
@@ -65,6 +96,14 @@
 		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 		font-size: 3rem;
 		font-weight: 300;
+		color: var(--theme-color-darker);
+	}
+
+	h2 {
+		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+		font-size: 1.5rem;
+		font-weight: 300;
+		color: var(--theme-color-primary);
 	}
 
 	/* Center the header and paragraph */
@@ -79,8 +118,8 @@
 	}
 
 	#submit-button:hover {
-		background-color: #000;
-		color: #FFF;
+		background-color: var(--theme-color-complement);
+		color: var(--theme-color-primary);
 	}
 
 	/* Animate the button when hovering */
@@ -92,6 +131,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		border-color: var(--theme-color-darker);
 	}
 
 	/* Style the input field similarly to the submit-button */
@@ -101,16 +141,16 @@
 		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 		font-size: 1.5rem;
 		font-weight: 300;
-		background-color: #FFF;
-		color: #000;
-		border: 1px solid #000;
+		background-color: var(--theme-color-complement);
+		color: var(--theme-color-primary);
+		border: 1px solid var(--theme-color-primary);
 		border-radius: 0.25rem;
 		width: 80%;
 	}
 
 	/* Style the submit button to be minimalistic and nice */
 	#submit-button {
-		border: 1px solid #000;
+		border: 1px solid var(--theme-color-primary);
 		border-radius: 0.25rem;
 		margin-top: 1rem;
 		cursor: pointer;
@@ -118,13 +158,19 @@
 		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 		font-size: 1.5rem;
 		font-weight: 300;
-		background-color: #FFF;
-		color: #000;
+		background-color: var(--theme-color-complement);
+		color: var(--theme-color-primary);
 		width: 50%;
 	}
 
-	#summary {
-		justify-content: flex-start;
+	@keyframes -global-fade-in {
+	0% {
+		opacity: 0;
 	}
+	100% {
+		opacity: 1;
+	}
+	}
+
 
 </style>
