@@ -68,14 +68,27 @@
     let formIncome;
 
     const submitForm = () => {
-        // @ts-ignore
-        tempHouse.set({
-            sqft: Number(formSqft ?? 0),
-            acres: Number(formAcres ?? 0),
-            parcelValue: Number(formParcel ?? 0),
-            description: descSelected,
-            city: citySelected
-        })
+        if (checked) {
+            // @ts-ignore
+            tempHouse.set({
+                sqft: Number(formSqft ?? 0),
+                acres: Number(formAcres ?? 0),
+                parcelValue: Number(useCityParcel[citySelected]),
+                description: descSelected,
+                city: citySelected
+            })
+        }
+        else {
+            // @ts-ignore
+            tempHouse.set({
+                sqft: Number(formSqft ?? 0),
+                acres: Number(formAcres ?? 0),
+                parcelValue: formParcel,
+                description: descSelected,
+                city: citySelected
+            })
+        }
+        
     }
     
 
@@ -97,7 +110,7 @@
     </div>
     <div class="div1">
         <Label>Select the city the property is in
-            <Select class="mt-2" items={useCityData} bind:value={citySelected} />
+            <Select class="mt-2" items={useCityParcel} bind:value={citySelected} />
         </Label>
     </div>
     <div class="div1">
