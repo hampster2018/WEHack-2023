@@ -85,7 +85,7 @@
                             google.maps.event.removeListener(z);
                             smoothZoom(subMap, max, cnt + 1);
                         });
-                        setTimeout(function(){subMap.setZoom(cnt)}, 200); 
+                        setTimeout(function(){subMap.setZoom(cnt)}, 150); 
                     }
                 }
 
@@ -94,8 +94,8 @@
 
                     console.log(`Click on: ${index}`);
 
-                    map.panTo(latLng);
 
+                    map.panTo(latLng);
                     setTimeout(() => {
                         smoothZoom(map, 18, map.getZoom());
                         setTimeout(() => {

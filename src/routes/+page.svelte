@@ -11,16 +11,7 @@
 	const DARK_CBRE_GREEN = '#1c293c';
 	const WHITE = '#ffffff';
 
-	// Write a function that smoothly scrolls to the map on a slight delay after setting ready to true
-	function scrollToMap() {
-		ready = true;
-		mapCenter.set(geoselect);
-		setTimeout(() => {
-			// @ts-ignore
-			document.getElementById('map').scrollIntoView({ behavior: 'smooth' });
-		}, 1);
-	}
-
+	
 	// Make the body visible after the page loads svelte including the transition
 	onMount(() => {
 		selectedHouse.set(-1);
@@ -30,34 +21,101 @@
 
 
 	const fetchValue = async (/** @type {number} */ sqft, /** @type {number} */ acrage, /** @type {number} */ parcelVal, /** @type {string} */ description, /** @type {string} */ city) => {
-    	const url = `http://localhost:5000/${sqft}/${acrage}/${parcelVal}/${description}/${city}`;
+		const url = `http://localhost:5000/${sqft}/${acrage}/${parcelVal}/${description}/${city}`;
     	const res = await fetch(url);
     	const data = await res.json();
     	let value = data['value']
 		console.log(value)
 	};
 	fetchValue(15196, 0.36537, 193080, 'Residential', 'Dallas');
-
-
+	
+	
 	/**
 	 * @type {{ lat: number; lng: number; }}
 	 */
 	let geoselect;
 	
+	// getElementY and doScrolling remade for svelte from https://stackoverflow.com/questions/17722497/scroll-smoothly-to-specific-element-on-page
+	/**
+	 * @param {HTMLDivElement} element
+	 */
+	function getElementY(element) {
+		return window.pageYOffset + element.getBoundingClientRect().top
+	}
+	
+	/**
+	 * @param {HTMLDivElement} element
+	 * @param {number} duration
+	 */
+	function doScrolling(element, duration) {
+		var startingY = window.pageYOffset
+		var elementY = getElementY(element)
+		// If element is close to page's bottom then window will scroll only to some position above the element.
+		var targetY = document.body.scrollHeight - elementY < window.innerHeight ? document.body.scrollHeight - window.innerHeight : elementY
+		var diff = targetY - startingY
+		// Easing function: easeInOutCubic
+		// From: https://gist.github.com/gre/1650294
+		var easing = function (/** @type {number} */ t) { return t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1 }
+		/**
+		 * @type {number}
+		 */
+		var start
+		
+		if (!diff) return
+		
+		// Bootstrap our animation - it will get called right before next frame shall be rendered.
+		window.requestAnimationFrame(function step(timestamp) {
+			if (!start) start = timestamp
+			// Elapsed miliseconds since start of scrolling.
+			var time = timestamp - start
+			// Get percent of completion in range [0, 1].
+			var percent = Math.min(time / duration, 1)
+			// Apply the easing.
+			// It can cause bad-looking slow frames in browser performance tool, so be careful.
+			percent = easing(percent)
+			
+			window.scrollTo(0, startingY + diff * percent)
+			
+			// Proceed with animation as long as we wanted it to.
+			if (time < duration) {
+				window.requestAnimationFrame(step)
+			}
+		})
+	}
+	
 	/**
 	 * @type {HTMLDivElement}
 	 */
 	let summaryPage;
-
-    selectedHouse.subscribe((value) => {
+	
+	selectedHouse.subscribe((value) => {
 		// smooth scroll to the summary page
 		setTimeout(() => {
 			// @ts-ignore
 			if(summaryPage) {
-				summaryPage.scrollIntoView({ behavior: 'smooth' });
+				// summaryPage.scrollIntoView({ behavior: 'smooth' });
+				doScrolling(summaryPage, 1500);
 			}
 		}, 100);
-    });
+	});
+
+	/**
+	 * @type {HTMLDivElement}
+	 */
+	let map;
+
+	// Write a function that smoothly scrolls to the map on a slight delay after setting ready to true
+	function scrollToMap() {
+		ready = true;
+		mapCenter.set(geoselect);
+		setTimeout(() => {
+			// @ts-ignore
+			if(map) {
+				map.scrollIntoView({ behavior: 'smooth' });
+				// doScrolling(map, 1000);
+			}
+		}, 1);
+	}
 
 </script>
 
@@ -84,7 +142,7 @@
 	</div>
 
 	{#if ready}
-		<div id="map" class="fullscreen-page">
+		<div bind:this={map} id="map" class="fullscreen-page">
 			<Map PUBLIC_API_KEY="{API_KEY}" />
 		</div>
 	{/if}
