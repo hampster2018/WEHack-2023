@@ -37,6 +37,11 @@
 	 * @type {{ lat: number; lng: number; }}
 	 */
 	let geoselect;
+
+	/**
+	 * @type {number}
+	 */
+	let incomeRestriction;
 	
 	// getElementY and doScrolling remade for svelte from https://stackoverflow.com/questions/17722497/scroll-smoothly-to-specific-element-on-page
 	/**
@@ -149,6 +154,14 @@
 				<option value={{lat: 34.07864944413756, lng: -118.13828026065687}}>SoCal</option>
 				<option value={{lat: 39.9398775, lng: -75.2141587}}>Philadelphia</option>
 			</select>
+
+			<select bind:value={incomeRestriction} id="income-input" name="places">
+				<option value={-1} selected>No income restriction</option>
+				<option value={15_000}>Less than $15,000 income</option>
+				<option value={25_000}>Less than $25,000 income</option>
+				<option value={50_000}>Less than $50,000 income</option>
+				<option value={100_000}>Less than $100,000 income</option>
+			</select>
 			<button id="submit-button" >Ready</button>
 		</form>
 
@@ -188,6 +201,16 @@
 
 <style>
 
+	select {
+		text-align: center;
+		margin: 0.25rem;
+		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+		background-color: var(--theme-color-complement);
+		color: var(--theme-color-primary);
+		border: 1px solid var(--theme-color-primary);
+		border-radius: 0.25rem;
+	}
+
 	#welcome {
 		opacity: 0;
 		transition: 2s;
@@ -220,7 +243,7 @@
 
 	#hero-subtext2 {
 		/* Add a little more padding on bottom */
-		padding-bottom: 1rem;
+		padding-bottom: 0.1rem;
 	}
 
 	#summary {
@@ -291,15 +314,9 @@
 	}
 
 	#zipcode-input {
-		text-align: center;
 		padding: 0.5rem 1rem;
-		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 		font-size: 1.5rem;
 		font-weight: 300;
-		background-color: var(--theme-color-complement);
-		color: var(--theme-color-primary);
-		border: 1px solid var(--theme-color-primary);
-		border-radius: 0.25rem;
 		width: 100%;
 	}
 
