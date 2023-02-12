@@ -22,7 +22,7 @@
     /**
      * @type {number}
      */
-    let zoom = 8;
+    let zoom = 10.5;
 
     onMount(async () => {
 
