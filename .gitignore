@@ -10,3 +10,5 @@ api_key.js
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 python/__pycache__/*
+python/2021.annual.by_industry*
+python/income.csv
