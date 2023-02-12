@@ -26,6 +26,9 @@
 		document.querySelector('body').style.opacity = 1;
 	});
 
+	/**
+	 * @type {{ lat: number; lng: number; }}
+	 */
 	let geoselect;
 
 </script>
@@ -43,8 +46,8 @@
 		<form id="zipcode-form" on:submit|preventDefault={scrollToMap}>
 			<!-- <input id="zipcode-input" type="text" placeholder="Enter a zipcode" bind:value={geocode} /> -->
 			<select bind:value={geoselect} id="zipcode-input" name="places">
-				<option value={{lat: 32.8209296, lng: -97.0117461}} selected>Dallas</option>
-				<option value={{lat: 34.0207305, lng: -118.6919255}}>SoCal</option>
+				<option value={{lat: 32.76147508980729, lng: -96.78377976258415}} selected>Dallas</option>
+				<option value={{lat: 34.07864944413756, lng: -118.13828026065687}}>SoCal</option>
 				<option value={{lat: 39.9398775, lng: -75.2141587}}>Philadelphia</option>
 			</select>
 			<button id="submit-button" >Ready?</button>
