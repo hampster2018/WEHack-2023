@@ -11,7 +11,7 @@ export const houses = writable([
 		bath: 2,
 		acres: 1,
 		parcelValue: -1,
-		description: 'This is a house',
+		description: 'residential',
 		city: 'Dallas',
 		coords: {lat: 32.99512755632141, lng: -96.84356606027706}
 	},
@@ -22,7 +22,7 @@ export const houses = writable([
 		bath: 5,
 		acres: 0.72,
 		parcelValue: -1,
-		description: 'This is a house',
+		description: 'residential',
 		city: 'SoCal',
 		coords: {lat: 34.24962180644662, lng: -118.46039023140953}
 	},
@@ -33,7 +33,7 @@ export const houses = writable([
 		bath: 2.5,
 		acres: 0.08466483,
 		parcelValue: -1,
-		description: 'This is a house',
+		description: 'residential',
 		city: 'Philadelphia',
 		coords: {lat: 40.122138642221444, lng: -74.99880327326689}
 	},

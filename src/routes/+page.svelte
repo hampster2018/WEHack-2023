@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import Map from './Map.svelte';
 	import { API_KEY } from './api_key';
-	import { mapCenter, selectedHouse } from './storage';
+	import { mapCenter, selectedHouse, houses } from './storage';
 	import Saos from "saos";
 	export let ready = false;
 	
@@ -22,9 +22,9 @@
 
 	// Make the body visible after the page loads svelte including the transition
 	onMount(() => {
+		selectedHouse.set(-1);
 		// @ts-ignore
 		document.querySelector('body').style.opacity = 1;
-
 	});
 
 	/**
@@ -44,7 +44,7 @@
 			if(summaryPage) {
 				summaryPage.scrollIntoView({ behavior: 'smooth' });
 			}
-		}, 1);
+		}, 100);
     });
 
 </script>
@@ -66,7 +66,7 @@
 				<option value={{lat: 34.07864944413756, lng: -118.13828026065687}}>SoCal</option>
 				<option value={{lat: 39.9398775, lng: -75.2141587}}>Philadelphia</option>
 			</select>
-			<button id="submit-button" >Ready?</button>
+			<button id="submit-button" >Ready</button>
 		</form>
 
 	</div>
@@ -85,10 +85,16 @@
 
 			<div class="summary-section">
 				<Saos top={100} once={true} animation={"fade-in 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both"}>
-					<h2>The first, and best result would be worth $2.5 million within 10 years.</h2>
+					<h2>
+						This listing is sized at {($houses[$selectedHouse].acres).toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 2})} acre(s), has {$houses[$selectedHouse].bed} bedroom(s), 
+						and {$houses[$selectedHouse].bath} bathroom(s).
+					</h2>
 				</Saos>
 				<Saos top={100} once={true} animation={"fade-in 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both"}>
-					<h2>The second result would be worth $1.3 million within 10 years.</h2>
+					<h2>
+						The current price of the house on the market is 
+						${($houses[$selectedHouse].listingPrice).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}.
+					</h2>
 				</Saos>
 			</div>
 

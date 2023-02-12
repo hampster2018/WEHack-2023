@@ -71,20 +71,47 @@
                     title: `${house.city} Listing`,
                 });
 
+                /**
+				 * @param {google.maps.Map<HTMLDivElement>} subMap
+				 * @param {number} max
+				 * @param {number} cnt
+				 */
+                function smoothZoom (subMap, max, cnt) {
+                    if (cnt >= max) {
+                        return;
+                    }
+                    else {
+                        const z = google.maps.event.addListener(subMap, 'zoom_changed', function(event){
+                            google.maps.event.removeListener(z);
+                            smoothZoom(subMap, max, cnt + 1);
+                        });
+                        setTimeout(function(){subMap.setZoom(cnt)}, 200); 
+                    }
+                }
+
                 marker.addListener("click", ({ domEvent, latLng }) => {
                     const { target } = domEvent;
 
                     console.log(`Click on: ${index}`);
 
-                    selectedHouse.set(index);
+                    map.panTo(latLng);
 
-                    infoWindow.close();
+                    setTimeout(() => {
+                        smoothZoom(map, 18, map.getZoom());
+                        setTimeout(() => {
+                            selectedHouse.set(index);
+                        }, 4000);
+                    }, 200);
+
+
+
+                    // infoWindow.close();
                     // @ts-ignore
-                    infoWindow.setContent(`<p>${house.sqft} sqft <br /> ${house.bed} bedroom(s) <br /> ${house.bath} bathroom(s) 
-                        <br /> ${house.acres} acre(s)</p>`);
+                    // infoWindow.setContent(`<p>${house.sqft} sqft <br /> ${house.bed} bedroom(s) <br /> ${house.bath} bathroom(s) 
+                    //     <br /> ${house.acres} acre(s)</p>`);
 
                     // @ts-ignore
-                    infoWindow.open(marker.map, marker);
+                    // infoWindow.open(marker.map, marker);
                 });
             });
 
