@@ -73,7 +73,7 @@
             tempHouse.set({
                 sqft: Number(formSqft ?? 0),
                 acres: Number(formAcres ?? 0),
-                parcelValue: Number(useCityParcel[citySelected]),
+                parcelValue: Number(-1),
                 description: descSelected,
                 city: citySelected
             })
@@ -110,7 +110,7 @@
     </div>
     <div class="div1">
         <Label>Select the city the property is in
-            <Select class="mt-2" items={useCityParcel} bind:value={citySelected} />
+            <Select class="mt-2" items={useCityData} bind:value={citySelected} />
         </Label>
     </div>
     <div class="div1">

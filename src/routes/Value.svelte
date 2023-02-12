@@ -21,7 +21,7 @@
      let value;
 
     const fetchValue = async (/** @type {number} */ sqft, /** @type {number} */ acrage, /** @type {number} */ parcelVal, /** @type {string} */ description, /** @type {string} */ city) => {
-    	const url = `http://localhost:5000/${sqft}/${acrage}/${parcelVal}/${description}/${city}`;
+    	const url = `http://localhost:5000/${sqft}/${acrage}/-1/${description}/${city}`;
     	const res = await fetch(url).then(async (data) => {
             return await data.json()
         }).catch((e) => {
